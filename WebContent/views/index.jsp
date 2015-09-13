@@ -54,10 +54,7 @@
 	
 	<!-- start search form -->
 	<!--  <div id="page">  -->
-	<br/><br/><br/>
-	<br/><br/><br/>
-	<br/><br/><br/>
-	<br/><br/><br/>
+
 		<form name="query" method="get" action="EventSearchByKeywordInDBOnlyAction" >
 			<table width='80%' border="0" >
 				<tr>
@@ -79,27 +76,6 @@
 									<s:submit name="forceDirectedLayout" value="Force Directed Layout" align="center" method="forceDirectedLayout"/>
 									<s:submit name="VideoContextualization" value="Video Contextualization" align="center" method="videoContextualize"/>
 							</tr>
-							
-							
-							<!--
-							<tr height="10">
-								<td width=30%>
-									<s:submit name="storySearch" value="Search Stories" align="center"  method="storySearchByName" style="width: 134px;"/>
-								</td>
-							</tr>
-							<tr height="10">
-								<td width=30%>
-									<s:submit name="entitySearch" value="Search Entities" align="center"  method="entitySearchByName" style="width: 134px;"/>
-								</td>
-							 </tr>
-							 <tr height="10">
-								<td >
-								<p style="color: #E77471">
-									<i>&nbsp;&nbsp;* leave empty for getting all items in the specified time period!</i>
-								</p>
-								</td>
-							</tr>
-							-->
 						</table>
 					</td>
 					
@@ -145,10 +121,7 @@
 			<br>
 			<br>
 			<br>
-			<br>
-			<br>
-			<br>
-
+		
 
 	<div id = "container">
 		<s:if test="searchsize == -1">
