@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,8 +14,10 @@ import com.opensymphony.xwork2.Action;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,8 +26,24 @@ import org.json.simple.parser.ParseException;
 
 
 public class textsyncAction implements Action{
-	private String myparam;
+	public String entitynames;
+	public String getEntitynames() {
+		return entitynames;
+	}
+
+	public void setEntitynames(String entitynames) {
+		this.entitynames = entitynames;
+	}
+
 	private String url;
+	public String jsonFileName = "";
+   public	String entities[];
+   public int hour=00;
+   public int min=00;
+   public int sec=00;
+    public String dataContent=null;	
+	public String content1 = "{\"localisation\": [{ \"sublocalisations\": { \"localisation\": [";
+    public String content8="]},\"type\": \"text\",\"tcin\": \"00:00:00.0000\",\"tcout\": \"02:00:00.0000\",\"tclevel\": 0}],\"id\": \"text-amalia01\",\"type\": \"text\",\"algorithm\": \"demo-video-generator\",\"processor\": \"Ina Research Department - N. HERVE\", \"processed\": 1421141589288, \"version\": 1}";
 	 ArrayList<ArrayList<ArrayList<String>>> mainArrayList = new ArrayList<ArrayList<ArrayList<String>>>(); //3d Array for holding all the property-value pair of entities.
 	 
 	 // Function for reading dbpedia json file
@@ -34,6 +51,8 @@ public class textsyncAction implements Action{
         BufferedReader reader = null;
         try {
             URL url = new URL(urlString);
+           // InputStream inputStream       = new FileInputStream("c:\\data\\input.txt");
+           // reader = new BufferedReader(new InputStreamReader(url.openStream()));
             reader = new BufferedReader(new InputStreamReader(url.openStream()));
             StringBuffer buffer = new StringBuffer();
             int read;
@@ -48,10 +67,108 @@ public class textsyncAction implements Action{
         }
     }
 	 
+	private String findingAbstract(ArrayList<ArrayList<ArrayList<String>>> mainArrayList, int entityNumber){
+		String[] triviaDemo;
+		String[] trivia=new String[10];
+        String key;	
+		  for(int i=entityNumber;i<entityNumber+1;i++){
+		     for(int j=0;j<mainArrayList.get(i).size();j++)
+					 { 
+					   key= mainArrayList.get(i).get(j).get(0);
+					  // System.out.println(key);
+			
+					   if(key.equals("abstract"))
+						   
+					   {
+						    triviaDemo=mainArrayList.get(i).get(j).get(1).split("\\.");
+						   
+						 
+						
+						    trivia[i]=triviaDemo[0];
+						    
+						    
+						    break;
+					   }
+					 }
+		   
+		  }
+		  
+		  return trivia[entityNumber];	
+		  }
+	
+	private void makeData(String data, int dataCounter ){
+		 String content2= "{\"data\": {\"text\": [";
+         String content3="]},";
+         String content4="\"tcin\":";
+         String content5=",\"tcout\":";
+         
+         String content6=",\"tclevel\": 1}";
+         String content7=",";
+         String dataContentDemo=null;
+         String tcin;
+		 String tcout;
+		 
+		 if(sec==60){
+			  sec=00;
+			  min=min+1;
+			  }
+		  else
+			  sec=sec+5;
+		  if(min==60){
+			  sec=00;
+		      min=00;
+		      hour=hour+1;
+		   }
+		  tcin=new DecimalFormat("00").format(hour)+":"+new DecimalFormat("00").format(min)+":"+new DecimalFormat("00").format(sec)+"."+"0000";
+		  //tcin=hour+":"+min+":"+sec+"."+"0000";
+		  if(sec<60)
+		  sec=sec+10;
+		  else{
+			  sec=00;
+			  min=min+1;
+		  }
+		  tcout=new DecimalFormat("00").format(hour)+":"+new DecimalFormat("00").format(min)+":"+new DecimalFormat("00").format(sec)+"."+"0000";
+		  //System.out.println(data);
+		 
+		  if(dataCounter>1){
+		      dataContentDemo=content7+content2+"\""+data+"\""+content3+content4+"\""+tcin+"\""+content5+"\""+tcout+"\""+content6;
+			  dataContent=dataContent+dataContentDemo;
+		  }
+		  else
+		  {
+		  dataContentDemo=content2+"\""+data+"\""+content3+content4+"\""+tcin+"\""+content5+"\""+tcout+"\""+content6;
+		  dataContent=dataContentDemo;
+		  }
+		 
+		
+	}
 	//Function for writting to json file for Amalia player
 	
 	private void jsonWriter(  ArrayList<ArrayList<ArrayList<String>>> mainArrayList){
 		String mainContent; 
+		Map<String,String> mapQuestion =new HashMap<String,String>();
+		Map<String,String> mapInfo =new HashMap<String,String>();
+		Map<String,String> mapTrivia =new HashMap<String,String>();
+		mapQuestion.put("currency", "What is the currency?");
+		mapQuestion.put("populationTotal", "How much is the total population?");
+		mapQuestion.put("capital", "What is the name of capital?");
+		mapQuestion.put("officialLanguages", "What is the official Language?");
+		mapQuestion.put("birthDate", "Do you know the birhdate?");
+		mapQuestion.put("birthPlace", "do you know the bithplace?");
+		mapQuestion.put("almaMater", "Which university he/she attended?");
+		mapQuestion.put("founder", "Do you know who is the founder?");
+		mapQuestion.put("foundingYear", "When it was founded?");
+        mapInfo.put("homepage", "The homepage is: ");
+        mapInfo.put("capital", "The capital is ");
+        mapInfo.put("officialLanguages", "The official language is ");
+        mapInfo.put("birthPlace", "The place of birth is ");
+        mapInfo.put("almaMater", "Attended ");
+        mapInfo.put("founder", "name of the founder is ");
+        mapTrivia.put("knownFor", "known for");
+        
+        
+		
+		
 		int sizeOfArrayList=0;
 		
 		for(int i=0;i<mainArrayList.size();i++)
@@ -63,34 +180,58 @@ public class textsyncAction implements Action{
 		try {
 			
 			
-			 String dataContent=null;	
-			String content1 = "{\"localisation\": [{ \"sublocalisations\": { \"localisation\": [";
-            String content2= "{\"data\": {\"text\": [";
-            String content3="]},";
-            String content4="\"tcin\":";
-            String content5=",\"tcout\":";
-            String content6=",\"tclevel\": 1}";
-            String content7=",";
-            String content8="]},\"type\": \"text\",\"tcin\": \"00:00:00.0000\",\"tcout\": \"02:00:00.0000\",\"tclevel\": 0}],\"id\": \"text-amalia01\",\"type\": \"text\",\"algorithm\": \"demo-video-generator\",\"processor\": \"Ina Research Department - N. HERVE\", \"processed\": 1421141589288, \"version\": 1}";
+           
+    
             
 		    String data;
-            String dataContentDemo=null;		   
+     		   
 		    String key;
 		    String value;
-		    int hour=00;
-		    int min=00;
-		    int sec=00;
-		    String tcin;
-		    String tcout;
-		    int  keyCounter=0;
-		   
-		    for(int i=0;i<mainArrayList.size();i++)
+		    
+		
+		  
+		    
+		  
+		    int  dataCounter=0;
+		 
+		    for(int i=0;i<mainArrayList.size();i++){
+		         data="Abstract"+":"+"<br>"+findingAbstract(mainArrayList, i);
+		         dataCounter++;
+		         makeData(data, dataCounter);
+		        // System.out.println(data);
+		  
 				for(int j=0;j<mainArrayList.get(i).size();j++)
-					 {keyCounter++;
+					 { 
 					   key= mainArrayList.get(i).get(j).get(0);
-					  value=mainArrayList.get(i).get(j).get(1);
-					  value=value.replaceAll("\"","");
-					  data=key+":"+value;
+					//   System.out.println(key);
+					 //  System.out.println(j);
+					  
+						   
+					   Random ran = new Random();
+					   int x = ran.nextInt(3) + 1;
+					   System.out.println(x);
+					   if(x==1){
+					   key=mapQuestion.get(key);
+					    }
+					   if(x==2){
+						   key=mapInfo.get(key);
+						    }
+					   if(x==3){
+						   key=mapTrivia.get(key);
+						    }
+					   
+					   if(key!=null){
+						   
+						  value=mainArrayList.get(i).get(j).get(1);
+						  
+						  value=value.replaceAll("\"","");
+						  data=entities[i+1]+":"+"<br>"+key+":"+"<br>Answer:"+value;
+						
+						   
+                            dataCounter++; 
+                            makeData(data,dataCounter);
+					  /*
+					 
 					  if(sec==60){
 						  sec=00;
 						  min=min+1;
@@ -113,33 +254,28 @@ public class textsyncAction implements Action{
 					  tcout=new DecimalFormat("00").format(hour)+":"+new DecimalFormat("00").format(min)+":"+new DecimalFormat("00").format(sec)+"."+"0000";
 					  //System.out.println(data);
 					 
-					  if(keyCounter==sizeOfArrayList){
-					
-						 
-						  dataContentDemo=content2+"\""+data+"\""+content3+content4+"\""+tcin+"\""+content5+"\""+tcout+"\""+content6;
+					  if(dataCounter>1){
+					      dataContentDemo=content7+content2+"\""+data+"\""+content3+content4+"\""+tcin+"\""+content5+"\""+tcout+"\""+content6;
 						  dataContent=dataContent+dataContentDemo;
 					  }
 					  else
 					  {
-						 
-					  dataContentDemo=content2+"\""+data+"\""+content3+content4+"\""+tcin+"\""+content5+"\""+tcout+"\""+content6+content7;
-					  if(keyCounter>2)
-											  
-					    dataContent=dataContent+dataContentDemo;
-					  else
-						  dataContent=dataContentDemo;
+					  dataContentDemo=content2+"\""+data+"\""+content3+content4+"\""+tcin+"\""+content5+"\""+tcout+"\""+content6;
+					  dataContent=dataContentDemo;
 					  }
-					  
+					  */
 						  
-					  
 					 }
-		  
+					   
+					 }
+		}
+		    
 			mainContent=content1+dataContent+content8;
 		//	System.out.println(dataContent);
 			//System.out.println(mainContent);
-			File file = new File("G:\\workspace\\eventsense\\WebContent\\scripts\\amalia01-text.json");
-		//	System.out.println(file);
-
+			//hardcoded
+			File file = new File("/Work/EUMSSI/mygithub/EventSense/WebContent/scripts/"+jsonFileName+".json");
+			System.out.println(file.getAbsolutePath());
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
 				file.createNewFile();
@@ -160,19 +296,16 @@ public class textsyncAction implements Action{
 
 	public String execute()
 	{
-		System.out.println(url); 
+	//	System.out.println(url); 
 		ArrayList<String> subSubArray;
 		 ArrayList<ArrayList<String>> subArray;
-		String entities[]=myparam.split(",");
-		System.out.println(myparam);
-         for(int i=0;i<entities.length;i++){
-        	 System.out.println(entities[i]);
-        
-         }
+		 System.out.println(entitynames);
+		 entities=entitynames.split(",");
          JSONParser parser = new JSONParser();
          try{
         	 for(int entityCounter=1;entityCounter<entities.length;entityCounter++ ){
         		 subArray = new ArrayList<ArrayList<String>>();
+        		 jsonFileName=jsonFileName+entities[entityCounter];
         	 String outputString=readUrl("http://dbpedia.org/data/"+entities[entityCounter]+".json");
         	//System.out.println("http://dbpedia.org/data/"+entities[1]+".json"); 
         	 Object ob;
@@ -194,18 +327,45 @@ public class textsyncAction implements Action{
         		         if(job1.get(key1) instanceof JSONArray)
         		    		 {
         		    			// System.out.println(key1);
+        		        	 String mainValue=null;
         		    			 jarray= (JSONArray)job1.get(key1);
         		    			for( int i=0;i<jarray.size(); i++){
         		    			   
         		    			job2=(JSONObject)(jarray.get(i));
         		    			literal=(String)(job2.get("type"));
-        		    			if(literal.equals("literal"))
+        		    			if(literal.equals("literal") || literal.equals("uri"))
         		    			   {
         		    		        String[] splitKey1=(String[])key1.split("/");
         		    				String mainKey=splitKey1[splitKey1.length-1].toString();
-        		    		        String mainValue=job2.get("value").toString();
-        		    				subSubArray = new ArrayList<String>();
         		    				
+        		    				if(mainKey.equals("abstract")){
+        		    					if(job2.get("lang").equals("en")){
+        		    						   mainValue=job2.get("value").toString();	
+        		    						//   System.out.println(mainValue);
+        		    					}
+        		    				}
+        		    				else
+        		    				{
+        		    		            if(job2.get("type").equals("uri"))
+        		    		            {
+        		    		            	mainValue=job2.get("value").toString();
+        		    		            	
+        		    		            	String[] splitMainValue=(String[])mainValue.split("/");
+        	        		    			 mainValue=splitMainValue[splitMainValue.length-1].toString();
+        	        		    			// System.out.println("mainvaue1"+":"+mainValue);
+        	        		    			 
+        		    		            }
+        		    		            else
+        		    		            {
+        		    		            	
+        		    		            		mainValue=job2.get("value").toString();
+        		    		            	
+        		    		            }
+        		    				}
+        		    				if(mainValue==null)
+        		    					continue;
+        		    				subSubArray = new ArrayList<String>();
+        		    			
                                     subSubArray.add(mainKey);
                                     subSubArray.add(mainValue);
                                     subArray.add(subSubArray);
@@ -221,8 +381,9 @@ public class textsyncAction implements Action{
                mainArrayList.add(subArray);
         	 }
         	 System.out.println(mainArrayList);
-        	 System.out.println(mainArrayList.get(0).get(0).get(0));
-        	 System.out.println(mainArrayList.get(0).get(0).get(1));
+        //	 System.out.println(mainArrayList.get(0).get(0).get(0));
+        //	 System.out.println(mainArrayList.get(0).get(0).get(1));
+        
             jsonWriter(mainArrayList);
         	 
          }
@@ -240,12 +401,6 @@ public class textsyncAction implements Action{
 
          
 	    return "test";
-	}
-	public String getMyparam() {
-		return myparam;
-	}
-	public void setMyparam(String myparam) {
-		this.myparam = myparam;
 	}
 
 	public String getUrl() {

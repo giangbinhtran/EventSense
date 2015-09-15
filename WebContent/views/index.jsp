@@ -74,7 +74,8 @@
 									<s:submit name="keyword search" value="Generate Timeline" align="center" method="eventSearch" />
 									<s:submit name="word cloud" value="Visualize by Wordcloud" align="center" method="wordCloud"/>
 									<s:submit name="forceDirectedLayout" value="Force Directed Layout" align="center" method="forceDirectedLayout"/>
-									<s:submit name="VideoContextualization" value="Video Contextualization" align="center" method="videoContextualize"/>
+									<s:submit name="VideoContextualization" value="Second-Screen Demo " align="center" method="videoContextualize"/>
+									<s:submit name="WCEPEvents" value="Entity Enrichment " align="center" method="WCEPeventSearch"/>
 							</tr>
 						</table>
 					</td>

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
 
 <!DOCTYPE html>
@@ -150,7 +149,7 @@
 				
 					<br/><br/><br/>
 					   <!--  <div class=scrollable>  -->     
-					    <h3 class="mainhead"> Details:</h3>
+					    <font size="5" color="blue"> <strong> Important Events</strong></font>
 						
 						<font size = "2">
 					    <s:iterator value="events" var="event">	
@@ -172,8 +171,9 @@
 										</a>
 					    			</font>								
 									<s:div style="width:95%; margin-left: auto; margin-right: auto; position: relative;">
-											<s:property escape = "true"  value="#event.headline"/>
-									
+											<font size="3" color="blue"> <strong> <s:property escape = "true"  value="#event.headline"/> </strong> </font>
+											<br>
+											<s:property escape = "true"  value="#event.description"/>
 									
 									<s:if test="#event.references.size() > 0">
 									&nbsp;&nbsp;(<s:iterator var="sources" value="#event.references">

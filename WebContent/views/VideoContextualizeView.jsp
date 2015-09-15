@@ -165,29 +165,23 @@
 									
 									
 									<!--  Key DBPedia entities -->
+									<s:set var="entityname" value="%{''}"/>
 									<s:if test="#event.entities.size() >0">
 									<strong> Major entities </strong>
 										&nbsp;&nbsp;{<s:iterator var="entity" value="#event.entities">
 											<s:a href="http://dbpedia.org/resource/%{#entity.name}" rel="nofollow">
 												<font color="blue" ><s:property  value="#entity.name"/></font>
 											</s:a>
-											
-										
-											
 											<s:set var="entityname" value="%{#entityname+','+#entity.name}"/>
-										
-											
 											<strong> | </strong>
 										</s:iterator>}
 											
-												
 										
 										<br/>
-										<a href='<s:url action="textsync" includeContext="true"><s:param name="myparam" value="%{#entityname}"/>
-										
-										</s:url>'>Go to the text synchronization </a>
+										<a href='<s:url action="textsync" includeContext="true"><s:param name="entitynames" value="%{#entityname}"/>
+										</s:url>'>Second Screen Player </a>
 									</s:if>
-										<s:set var="entityname">null</s:set>
+									
 						    	</s:div>
 							</div>
 						</s:iterator>

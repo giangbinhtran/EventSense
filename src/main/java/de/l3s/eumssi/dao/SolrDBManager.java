@@ -231,11 +231,14 @@ public class SolrDBManager {
 		ArrayList<String> qfilter = new ArrayList<String> ();
 		for (String s: sources) {
 			if (s.equals("NewsArticle")) {
-				qfilter.add("Eumssi-News-Crawler");
-				qfilter.add("DW-en_GB");
+				qfilter.add("\"News\"");
+				qfilter.add("\"DW article\"");
 			}
 			if (s.equals("Video")) {
-				qfilter.add("DW-vid_EN");
+				qfilter.add("\"DW video\"");
+				qfilter.add("\"Youtube\"");
+				qfilter.add("\"DW (Youtube)\"");
+				qfilter.add("\"Guardian (Youtube)\"");
 			}
 		}
 		String[] tmp = (String[]) qfilter.toArray(new String[qfilter.size()]);
@@ -263,14 +266,14 @@ public class SolrDBManager {
 			query.setQuery(queryString);
 		}
 		query.addFilterQuery("source:" + source);
-		query.addFilterQuery("meta.source.inLanguage:\"en\"");
+		//query.addFilterQuery("meta.source.inLanguage:\"en\"");
 		//--------------------------------------------------------------------
 		query.setFields("meta.source.datePublished", "meta.source.headline", "meta.source.url", "meta.source.httpHigh", 
 				"meta.source.publisher");
 		for (String searchField: searchfields) {query.addField(searchField);}
 		
 		
-		query.addFilterQuery("meta.source.inLanguage:\"en\"");
+		//query.addFilterQuery("meta.source.inLanguage:\"en\"");
 		query.setSort("meta.source.datePublished", ORDER.desc);
 		query.setRows(n_items);
 		System.out.println("SearchByKeyword " + query.toString());

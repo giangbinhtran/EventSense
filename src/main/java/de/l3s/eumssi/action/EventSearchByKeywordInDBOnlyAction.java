@@ -1,6 +1,8 @@
 package de.l3s.eumssi.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +17,14 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import de.l3s.eumssi.core.CoOccurence;
 import de.l3s.eumssi.core.StoryDistribution;
+import de.l3s.eumssi.dao.DatabaseManager;
 import de.l3s.eumssi.dao.SolrDBManager;
 import de.l3s.eumssi.model.*;
+import de.l3s.eumssi.service.ContentHandling;
 
 public class EventSearchByKeywordInDBOnlyAction  extends ActionSupport implements ServletRequestAware {
-	
+	private ContentHandling helper = new ContentHandling();
+	private DatabaseManager dbmysql = new DatabaseManager();
 	private static final long serialVersionUID = 1L;
 	private SolrDBManager db = new SolrDBManager();
 	private String query;
@@ -103,6 +108,123 @@ public class EventSearchByKeywordInDBOnlyAction  extends ActionSupport implement
 		return searchFields;
 	}
 	
+	
+	public String WCEPeventSearch() throws Exception {
+		if (ServletActionContext.getRequest().getServerName().equals(db.conf.getProperty("domainName"))){
+			contextPath = null;
+			useContextPath = false;
+		}else{
+			contextPath = ServletActionContext.getServletContext().getContextPath();
+			useContextPath = true;
+		}
+		
+		infer = Boolean.valueOf(db.conf.getProperty("display_infered_relations"));
+		
+		
+		try{
+			fromDate = "2000-01-01";
+			toDate = "2015-05-31";
+			itemType = "Query";
+			itemId = null;
+			if(query!=null){
+				itemName = query;
+			}else{
+				itemName = " show all events between " + fromDate + " and " + toDate;
+			}
+			System.out.println("Infor:" + itemName);
+			
+			hasWikipediaUrl = false;
+			wikipediaUrl = "";
+	
+			List<Event> eventsTmp = new ArrayList<Event>();
+			if(query == null){
+				eventsTmp = dbmysql.getEvents(fromDate, toDate);
+			}else if (query.isEmpty()){
+				eventsTmp = dbmysql.getEvents(fromDate, toDate);
+			}else{
+				eventsTmp = dbmysql.searchEventsByKeyword(query, fromDate, toDate);
+			}
+			System.out.println("INFOR: number of events found: " + eventsTmp.size());
+			
+			
+/*			if (infer) 
+				events_tmp = helper.addInferedInformation(events_tmp);
+*/			
+			// apply filters, if exist (e.g. show only events from a specific story, category, or entity)
+			if(filterType != null && filterItemId != null){
+				events = helper.filterEvents(eventsTmp, filterType, filterItemId);	
+			}else{
+				events = eventsTmp;
+			}
+							
+			searchsize = events.size();
+					
+			
+			// 1. add the links for each entity mention
+			// and remove double montion of references
+			for (Event e: events){
+//				if (e.getAnnotatedDescription() != null)
+					e = helper.addEntityLinks(e, contextPath);
+//				else
+//					e = helper.addEntityLinks_Old(e, contextPath);
+				
+//				e = helper.removeDoubleReferences(e);
+			}
+			
+			
+			
+			// reverse the order of events to show latest events first
+			Collections.sort(events, Collections.reverseOrder());
+
+			// get the dates of the first and last events to show on results page:
+			if (!events.isEmpty()){
+				toDate = events.get(0).getDate().toString();
+				fromDate = events.get(events.size()-1).getDate().toString();
+			}			
+			
+			
+			int maxItems = Integer.valueOf(db.conf.getProperty("maxItemsInLeftSide"));
+			
+			// 2. get related categories
+			relatedCategories = helper.getCategoryList(events);
+//			if(relatedCategories.size() > maxItems)
+//				relatedCategories = (ArrayList<Category>) relatedCategories.subList(0, maxItems-1);
+			
+			// 3. get related stories
+			relatedStories = helper.getStoryList(events);
+//			if(relatedStories.size() > maxItems)
+//				relatedStories = (ArrayList<Story>) relatedStories.subList(0, maxItems-1);
+			
+			//4. get top entities
+			topEntities = helper.getEntities(events, maxItems);
+			
+			// 5. get related locations
+			relatedLocations = helper.getLocationList(events);
+			
+			
+			// For performance purpose, only show the last x events:
+			//
+			int maxNumOfEventsToDisplay = Integer.parseInt(db.conf.getProperty("visualization_MaxTimelineSize"));
+			if (events.size() > maxNumOfEventsToDisplay ){
+				List<Event> eventsToDisplay = new ArrayList<>();
+				for(int i=0; i< maxNumOfEventsToDisplay; i++){
+					eventsToDisplay.add(new Event (events.get(i)));
+				}
+				events = eventsToDisplay;
+			}
+			timeline = helper.getTimelineJSON(events, contextPath);
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();	
+		}finally{
+			dbmysql.closeConnection();
+		}
+			
+		return "WCEPEventsView";
+	}
+	
+	
 	public String eventSearch() throws Exception {
 		ArrayList<String> searchField = formSearchField();						//search field
 		contextPath = ServletActionContext.getServletContext().getContextPath();
@@ -138,12 +260,20 @@ public class EventSearchByKeywordInDBOnlyAction  extends ActionSupport implement
 			//events = db.searchByKeyword(query, "Eumssi-News-Crawler OR DW-en_GB ", "meta.source.text", maxNumOfEventsToDisplay);
 			events = db.searchByKeyword(query, sources, searchField, maxNumOfEventsToDisplay);
 			searchsize = events.size();
-					
+			HashMap<String, Integer> c = new HashMap<String, Integer> ();
 			// get the dates of the first and last events to show on results page:
 			if (!events.isEmpty()){
 				toDate = events.get(0).getDate().toString();
 				fromDate = events.get(events.size()-1).getDate().toString();
+				int currentcount = c.containsKey(toDate)?c.get(toDate):0;
+				c.put(toDate, currentcount+1);
 			}			
+			
+			for (Event e: events) {
+				e.setDescription(e.getDescription().substring(0, Math.min(150, e.getDescription().length())) + " ...");
+			}
+			
+			
 			
 			timeline = db.getTimelineJSON(events, contextPath);
 		}catch(Exception e){
