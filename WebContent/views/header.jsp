@@ -22,10 +22,9 @@
 					">
 					<h2> <b>EventSense </b> </h2>
 					<p> Making sense of multimodal events</p>
-						<!-- <img height="88" width="400" src="Images/eumssi-logo-1.png"></img>  -->						
 					</a>
 				</div>
-				
+				<img height="108" width="200" src="Images/eumssi-logo.png"></img>				
 				<div id="menu">
 					<font size = "3">
 						<ul style="height: 208px;">

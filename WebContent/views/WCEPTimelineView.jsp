@@ -297,13 +297,17 @@
 					
 					<!--  #############################################  -->
 					<!--  Related Locations - start -->
-						<h3 class="mainhead">Locations</h3>
 						
-						<s:set var="lastIndex" value="relatedLocations.size()-1" />
-						<s:if test="relatedLocations.size() >= 20">
+						<s:set var="lastIndex" value="-1" />
+						<s:if test="%{#relatedLocations != null }">
+							<h3 class="mainhead">Locations</h3>
+							<s:set var="lastIndex" value="relatedLocations.size()-1" />
+						</s:if>
+						<s:else>
+						<s:if test="%{#relatedLocations != null } && relatedLocations.size() >= 20">
 							<s:set var="lastIndex" value="19" />
 						</s:if>
-						
+						</s:else>
 						<s:iterator status="status" var="counter" begin="0" end="#lastIndex" >
 							<s:set var="location" value="relatedLocations.get(#status.index)" />
 							
@@ -501,12 +505,12 @@
 					    			<font color="#0040FF" >
 					    				<a href="
 					    					<s:if test="useContextPath != false">
-												<s:url action="ShowEventByDate" includeContext="true">
+												<s:url action="WCEPShowEventByDate" includeContext="true">
 													<s:param name="storyDate" value="#event.date" > </s:param>
 												</s:url>
 											</s:if>
 											<s:else>
-												<s:url action="ShowEventByDate" includeContext="false">
+												<s:url action="WCEPShowEventByDate" includeContext="false">
 													<s:param name="storyDate" value="#event.date" > </s:param>
 												</s:url>
 											</s:else>">

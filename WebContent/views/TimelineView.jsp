@@ -155,7 +155,7 @@
 					    <s:iterator value="events" var="event">	
 					    	<div class="change">	
 															   
-					    			<font color="#0040FF" >
+					    			<font color="#0040FF">
 					    				<a href="
 					    					<s:if test="useContextPath != false">
 												<s:url action="ShowEventByDate" includeContext="true">
