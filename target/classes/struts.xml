@@ -18,6 +18,12 @@
             <result name="test">/views/textsyncview.jsp</result>
         </action>
         
+         <action name="countryQuestions" 
+			class="de.l3s.eumssi.action.countryQuestionAction">
+            <result name="success">/views/countryQuestionView.jsp</result>
+        </action>
+        
+        
 		<action name="EventSearchByKeywordInDBOnlyAction"
 			class="de.l3s.eumssi.action.EventSearchByKeywordInDBOnlyAction">
 			<result name="QueryTimelineView">/views/TimelineView.jsp</result>
