@@ -20,11 +20,11 @@
 							<s:url action="Index" includeContext="false"></s:url>
 						<% } %>
 					">
-					<h2> <b>EventSense </b> </h2>
-					<p> Making sense of multimodal events</p>
+					<h2> <b>Eumssi Event Explorer </b> </h2>
+					<p> Event Understanding</p>
 					</a>
 				</div>
-				<img height="108" width="200" src="Images/eumssi-logo.png"></img>				
+				<img height="108" width="300" src="Images/eumssi-logo.png"></img>				
 				<div id="menu">
 					<font size = "3">
 						<ul style="height: 208px;">
