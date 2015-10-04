@@ -64,7 +64,7 @@
                  
                         $( function () {
                         	 var fileName = document.getElementById("jsonFileName").value;
-                        
+
                             $( "#defaultPlayer" ).mediaPlayer( {
                                 autoplay : true,
                                 src : "http://tv-download.dw.de/dwtv_video/flv/eme/eme20140119_whisky_sd_avc.mp4",
@@ -109,7 +109,42 @@
             var t = $this.text();
             $this.html(t.replace("&lt;br&gt;","<br>"));
            
-        }); }, 2000);
+        }); 
+        
+        $("input[type='button']").click(function() {
+        	var selected = $(this).siblings("input[type='radio']:checked");
+        	if (selected.length > 0) {
+        	    selectedVal = selected.val();
+        	}
+
+        	if(selected.val()==selected.attr('name'))
+        	$(this).val("Correct");
+        	else
+        	$(this).val("False");
+        	$(this).attr("disabled",true);
+        	});
+        
+        }, 2000);
+        
+       
+        
+       /*//   $("body").on("load","p.text",function(){
+        	alert("in custom");
+        	   $.each($("p.text"),function(){
+        		   var $this = $(this);
+                   var t = $this.text();
+                   $this.html(t.replace("&lt;br&gt;","<br>"));
+        	   })
+        	})
+        	*/
+
+        //	$("body").on("click","p.text",function(){
+        		
+        	//	$("div.demo").trigger("custom");	
+       // 	});
+        	
+      
+        
         </script>
         <p>Entities of this video</p>
        <ul>
