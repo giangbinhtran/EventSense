@@ -230,7 +230,7 @@ a:hover {
 }
 
 #menu .current_page_item a {
-	background: #16A085;
+	background: #1589FF;
 	border-radius: 5px;
 }
 
@@ -240,7 +240,7 @@ a:hover {
 	margin-right: auto;
 	margin-left:  auto;
 	padding: 10px 0px 0px 0px;
-	background: #FFFFFF;
+	background: #eeeee;
 }
 
 /* input box */
@@ -305,9 +305,9 @@ ul.input-list li {
 }
 .style-1 input[type="text"]:focus, .style-1 input[type="text"].focus {
   border: solid 1px #2ECC71;
-  -webkit-box-shadow: 0 0 5px 1px #16A085;
-  -moz-box-shadow: 0 0 5px 1px #16A085;
-  box-shadow: 0 0 5px 1px #16A085;
+  -webkit-box-shadow: 0 0 5px 1px #6998f0;
+  -moz-box-shadow: 0 0 5px 1px #6998f0;
+  box-shadow: 0 0 5px 1px #6998f0;
 }
 
 /* ============================================================
@@ -323,9 +323,9 @@ ul.input-list li {
 }
 .style-2 input[type="text"]:focus, .style-2 input[type="text"].focus {
   border: solid 5px #969696;
-  -webkit-box-shadow: 0 0 5px 1px #16A085;
-  -moz-box-shadow: 0 0 5px 1px #16A085;
-  box-shadow: 0 0 5px 1px #16A085;
+  -webkit-box-shadow: 0 0 5px 1px #6998f0;
+  -moz-box-shadow: 0 0 5px 1px #6998f0;
+  box-shadow: 0 0 5px 1px #FC8505;
 }
 
 /* ============================================================
@@ -745,7 +745,7 @@ input[type=submit] {
     font-family: Tahoma;
     font-size:18px;
     color: white;
-    background: #1ABC9C;
+    background: #1ABC9C; 
     /* Old browsers */
     background: -moz-linear-gradient(top, #1ABC9C 1%, #ededed 100%);
     /* FF3.6+ */

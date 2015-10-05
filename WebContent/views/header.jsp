@@ -21,7 +21,6 @@
 						<% } %>
 					">
 					<h2> <b>Eumssi Event Explorer </b> </h2>
-					<p> Event Understanding</p>
 					</a>
 				</div>
 				<img height="108" width="300" src="Images/eumssi-logo.png"></img>				

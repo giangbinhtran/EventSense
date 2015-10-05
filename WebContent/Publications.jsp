@@ -20,7 +20,10 @@
 	  	
 		        <h1 style="color:#A31919;">Publications</h1><br>
 		        <p class="resyle">
-		        <li> Giang Tran, Mohammad Alrifai, Eelco Herder. Timeline Summarization from Relevant Headlines. In Proc. ECIR 2015. </li>
+		        <li> Giang Tran, Mohammad Alrifai, Eelco Herder. Timeline Summarization from Relevant Headlines. In Proc. 37th ECIR 2015. </li>
+		        <li> Giang Tran , Eelco Herder, Katja Markert. Joint Graphical Models for Date Selection in Timeline Summarization. In Proc. 53rd ACL 2015 </li>
+		        <li> Giang Tran , Eelco Herder. Detecting Filter Bubbles in Ongoing News Stories. Late Breaking Result Paper. In Proc. 23rd UMAP 2015 </li>
+		        
 		        </p> 
 	  
    			</div>
