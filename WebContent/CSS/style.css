@@ -52,7 +52,7 @@ ul,ol {
 }
 
 a {
-	color: #B50D0D;
+	color: #ff493c;
 }
 
 a:hover {
@@ -745,21 +745,21 @@ input[type=submit] {
     font-family: Tahoma;
     font-size:18px;
     color: white;
-    background: #1ABC9C; 
+    background: #6998f0; 
     /* Old browsers */
-    background: -moz-linear-gradient(top, #1ABC9C 1%, #ededed 100%);
+    background: -moz-linear-gradient(top, #6998f0 1%, #ededed 100%);
     /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, #f4f4f4), color-stop(100%, #ededed));
     /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #1ABC9C 1%, #ededed 100%);
+    background: -webkit-linear-gradient(top, #6998f0 1%, #ededed 100%);
     /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #1ABC9C 100%, #ededed 100%);
+    background: -o-linear-gradient(top, #6998f0 100%, #ededed 100%);
     /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #1ABC9C 100%, #ededed 100%);
+    background: -ms-linear-gradient(top, #6998f0 100%, #ededed 100%);
     /* IE10+ */
-    background: linear-gradient(to bottom, #1ABC9C 100%, #ededed 100%);
+    background: linear-gradient(to bottom, #6998f0 100%, #ededed 100%);
     /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1ABC9C', endColorstr='#ededed', GradientType=2);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6998f0', endColorstr='#ededed', GradientType=2);
     /* IE6-9 */
 }
 

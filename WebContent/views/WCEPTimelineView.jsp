@@ -126,7 +126,7 @@
 								</s:if>
 							</h3>
 						        
-						    <h3 class="mainhead">Timeline: <b><s:property value="searchsize"/></b> events from <b><s:property value="fromDate"/></b> to <b><s:property value="toDate"/></b></h3>
+						    <h3 class="mainhead">Timeline: <b><s:property value="searchsize"/></b> <strong> Wikipedia </strong> events from <b><s:property value="fromDate"/></b> to <b><s:property value="toDate"/></b></h3>
 					    	<br/><br/>
 					    	   
 					<!-- </div>  -->	
